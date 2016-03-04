@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * @author G.A.P. II
+ * @author simonini
  */
 public abstract class AbstractFastMetablocking extends AbstractFastEfficiencyMethod {
 
