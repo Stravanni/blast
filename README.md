@@ -1,6 +1,6 @@
 # blast
 
-## Soon online the istruction and the cleaned code.
+## Soon online the istructions and a better organized code.
 
 
 ##Libraries
