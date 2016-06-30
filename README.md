@@ -1,9 +1,5 @@
 # blast
 
-## Soon online the istructions and a better organized code.
+## The current version of **blast** is implemented as part of the BlockingFramework (link)[https://sourceforge.net/projects/erframework/]
 
-
-##Libraries
-- BlockingFramework: https://sourceforge.net/projects/erframework/
-
-Here you can find a ```.jar```
+## The AttributeClusteringBlocking.java class has been implemented to support LSH
