@@ -9,5 +9,5 @@ So, in this repo you will find the BlockingFramework [[1]](#papadakis2013)
 
 
 <a name="papadakis2013"/>
-Papadakis, George, et al. "A blocking framework for entity resolution in highly heterogeneous information spaces." IEEE Transactions on Knowledge and Data Engineering 25.12 (2013): 2665-2682.
+[1] Papadakis, George, et al. "A blocking framework for entity resolution in highly heterogeneous information spaces." IEEE Transactions on Knowledge and Data Engineering 25.12 (2013): 2665-2682.
 </a>
