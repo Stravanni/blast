@@ -1,8 +1,9 @@
 # BLAST
 
-## Source code
+#### Current Project Version
 The current version of **blast** (this one) is implemented as part of the BlockingFramework [[1]](#papadakis2013).
 
+## Source code
 So, in this repo you will find the [BlockingFramework source code](https://sourceforge.net/projects/erframework/), and the following parts implementing the blast approach:
 - The AttributeClusteringBlocking.java class has been implemented to support LSH
 - EntopryExtraction and MetaBlocking proposed in blast will be **soon updated here** (in the branch you can find the old version though).
