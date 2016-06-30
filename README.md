@@ -1,4 +1,4 @@
-# blast
+# BLAST
 
 ## Source code
 The current version of **blast** (this one) is implemented as part of the [BlockingFramework - link](https://sourceforge.net/projects/erframework/)
