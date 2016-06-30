@@ -1,6 +1,6 @@
 # BLAST
 
-#### Current Project Version
+## Current Project Version
 The current version of **blast** (this one) is implemented as part of the BlockingFramework [[1]](#papadakis2013).
 
 ## Source code
