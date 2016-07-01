@@ -15,11 +15,12 @@ import java.util.Map.Entry;
 public class TokenShingling extends AbstractModel {
 
     private double noOfTotalTerms;
-    private final HashMap<String, Boolean> itemsFrequency;
+    private final HashMap<String, Integer> itemsFrequency;
     private boolean[] shingles;
     private HashSet<Integer> shingles_set;
     private int shingles_size;
     private final LinkedHashSet<String> tokens;
+    private final HashMap<String, Integer> attributeInstanceFrequency;
 
     private int full;
 
@@ -31,8 +32,10 @@ public class TokenShingling extends AbstractModel {
         shingles_set = new HashSet<>();
         //shingles_attribute_size = 0;
 
+        attributeInstanceFrequency = new HashMap<>();
+
         noOfTotalTerms = 0;
-        itemsFrequency = new HashMap<String, Boolean>();
+        itemsFrequency = new HashMap<String, Integer>();
         tokens = new LinkedHashSet<>();
 
         shingles = null;
@@ -66,6 +69,9 @@ public class TokenShingling extends AbstractModel {
 
         String[] tokens = gr.demokritos.iit.jinsect.utils.splitToWords(text);
 
+//        Integer freq_instance = attributeInstanceFrequency.getOrDefault(attribute_instance, 0);
+//        attributeInstanceFrequency.put(attribute_instance, ++freq_instance);
+
         int noOfTokens = tokens.length;
         noOfTotalTerms += noOfTokens;
         final HashSet<String> features = new HashSet<String>();
@@ -82,7 +88,7 @@ public class TokenShingling extends AbstractModel {
         for (int j = 0; j < noOfTokens; j++) {
             String feature = tokens[j].trim();
             features.add(feature);
-            itemsFrequency.put(feature, true);
+            itemsFrequency.put(feature, (itemsFrequency.getOrDefault(feature, 0) + 1));
             this.tokens.add(feature);
         }
     }
@@ -94,10 +100,11 @@ public class TokenShingling extends AbstractModel {
         String[] tokens = gr.demokritos.iit.jinsect.utils.splitToWords(text);
 
         int noOfTokens = tokens.length;
+        noOfTotalTerms += noOfTokens;
 
         for (int j = 0; j < noOfTokens; j++) {
             String feature = tokens[j].trim();
-            itemsFrequency.put(feature, true);
+            itemsFrequency.put(feature, (itemsFrequency.getOrDefault(feature, 0) + 1));
             this.tokens.add(feature);
             shingles_set.add(all_tokens.get(feature));
         }
@@ -111,13 +118,30 @@ public class TokenShingling extends AbstractModel {
         String[] tokens = gr.demokritos.iit.jinsect.utils.splitToWords(text);
 
         int noOfTokens = tokens.length;
+        noOfTotalTerms += noOfTokens;
 
         for (int j = 0; j < noOfTokens; j++) {
             String feature = tokens[j].trim();
+            itemsFrequency.put(feature, (itemsFrequency.getOrDefault(feature, 0) + 1));
             shingles_set.add(all_tokens.get(feature));
         }
 
         return 1;
+    }
+
+    @Override
+    public double getEntropyToken(boolean normalized) {
+        double entropy = 0.0;
+        double len = noOfTotalTerms;
+        for (Entry<String, Integer> entry : itemsFrequency.entrySet()) {
+            double p_i = (entry.getValue() / len);
+            entropy -= (p_i * (Math.log10(p_i) / Math.log10(2.0d)));
+        }
+        if (normalized) {
+            return entropy / getMaxEntropy(len);
+        } else {
+            return entropy;
+        }
     }
 
     public int[] getMinHash(MinHash minhash) {
@@ -164,5 +188,10 @@ public class TokenShingling extends AbstractModel {
         }
         double sim = (double) intersection / (double) (tokens.size() + ((TokenShingling) oModel).getFrequencies().size() - intersection);
         return sim;
+    }
+
+    private double getMaxEntropy(double N) {
+        double entropy = Math.log10(N) / Math.log10(2.0d);
+        return entropy;
     }
 }

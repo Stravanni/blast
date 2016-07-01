@@ -28,17 +28,18 @@ import org.jgrapht.graph.SimpleGraph;
 
 public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenBlocking implements Constants {
 
-    private int latestEntities;
-    private final Map<String, Integer>[] attributeClusters;
-    private final RepresentationModel model;
+    protected int latestEntities;
+    protected final Map<String, Integer>[] attributeClusters;
+    protected final RepresentationModel model;
 
-    private int minhash_size = 120;
-    private int rows = 1;
-    private boolean approx = true;
 
-    private HashMap<String, Integer> all_tokens;
-    private int all_tokens_size;
-    private int all_shingle_counter;
+    protected int minhash_size = 120;
+    protected int rows = 1;
+    protected boolean approx = true;
+
+    protected HashMap<String, Integer> all_tokens;
+    protected int all_tokens_size;
+    protected int all_shingle_counter;
 
     public AbstractAttributeClusteringBlocking(RepresentationModel md, List<EntityProfile>[] profiles) {
         super("Memory-based Attribute Clustering Blocking", profiles);
@@ -121,6 +122,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         super("Disk-based Attribute Clustering Blocking", entities, index);
 
         model = md;
+
         attributeClusters = new HashMap[2];
         sourceId = 0;
         AbstractModel[] attributeModels1 = buildAttributeModels();
@@ -137,7 +139,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         }
     }
 
-    private AbstractModel[] buildAttributeModels() {
+    protected AbstractModel[] buildAttributeModels() {
         List<EntityProfile> profiles = getProfiles();
         latestEntities = profiles.size();
 
@@ -159,17 +161,20 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
 
         int index = 0;
         AbstractModel[] attributeModels = new AbstractModel[attributeProfiles.size()];
+
+
         for (Entry<String, List<String>> entry : attributeProfiles.entrySet()) {
             attributeModels[index] = RepresentationModel.getModel(model, entry.getKey());
             for (String value : entry.getValue()) {
                 attributeModels[index].updateModel(value);
             }
+
             index++;
         }
         return attributeModels;
     }
 
-    private void buildShingles() {
+    protected void buildShingles() {
         List<EntityProfile> profiles = getProfiles();
         //latestEntities = profiles.size();
 
@@ -195,7 +200,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
     }
 
     // build_lsh
-    private TokenShingling[] buildAttributeModels_lsh() {
+    protected TokenShingling[] buildAttributeModels_lsh() {
         List<EntityProfile> profiles = getProfiles();
         latestEntities = profiles.size();
 
@@ -217,6 +222,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
 
         int index = 0;
         TokenShingling[] attributeModels = new TokenShingling[attributeProfiles.size()];
+
         for (Entry<String, List<String>> entry : attributeProfiles.entrySet()) {
             attributeModels[index] = (TokenShingling) RepresentationModel.getModel(model, entry.getKey());
             for (String value : entry.getValue()) {
@@ -227,12 +233,13 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
                 }
                 //attributeModels[index].updateModel(value);
             }
+
             index++;
         }
         return attributeModels;
     }
 
-    private void clusterAttributes(AbstractModel[] attributeModels, SimpleGraph graph) {
+    protected void clusterAttributes(AbstractModel[] attributeModels, SimpleGraph graph) {
         int noOfAttributes = attributeModels.length;
 
         ConnectivityInspector ci = new ConnectivityInspector(graph);
@@ -256,7 +263,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         attributeClusters[1] = null;
     }
 
-    private void clusterAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, SimpleGraph graph) {
+    protected void clusterAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, SimpleGraph graph) {
         int d1Attributes = attributeModels1.length;
         int d2Attributes = attributeModels2.length;
 
@@ -285,7 +292,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         }
     }
 
-    private SimpleGraph compareAttributes(AbstractModel[] attributeModels) {
+    protected SimpleGraph compareAttributes(AbstractModel[] attributeModels) {
         int noOfAttributes = attributeModels.length;
         int[] mostSimilarName = new int[noOfAttributes];
         double[] maxSimillarity = new double[noOfAttributes];
@@ -319,7 +326,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         return namesGraph;
     }
 
-    private SimpleGraph compareAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2) {
+    protected SimpleGraph compareAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2) {
         int d1Attributes = attributeModels1.length;
         int d2Attributes = attributeModels2.length;
         int totalAttributes = d1Attributes + d2Attributes;
@@ -356,7 +363,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         return namesGraph;
     }
 
-    private SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels, int signature_size, int rows_band, boolean approx) {
+    protected SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels, int signature_size, int rows_band, boolean approx) {
         int noOfAttributes = attributeModels.length;
         int[] mostSimilarName = new int[noOfAttributes];
         double[] maxSimillarity = new double[noOfAttributes];
@@ -422,7 +429,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
         return namesGraph;
     }
 
-    private SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, int signature_size, int rows_band, boolean approx) {
+    protected SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, int signature_size, int rows_band, boolean approx) {
         int d1Attributes = attributeModels1.length;
         int d2Attributes = attributeModels2.length;
         int totalAttributes = d1Attributes + d2Attributes;
