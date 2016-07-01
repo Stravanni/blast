@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class LSH_AttributeMatchInduction {
 
-    private static int DATASET = 4;
-    private static boolean CLEAN = true;
+    private static int DATASET = 1;
+    private static boolean CLEAN = false;
     private static String BASEPATH = "/Users/gio/Desktop/umich/data/data_blockingFramework/";
 
     public static void main(String[] args) {
@@ -47,10 +47,12 @@ public class LSH_AttributeMatchInduction {
         if (profiles.length > 1) {
             //ac = new TokenBlocking(profiles);
             ac = new BlockBuilding.MemoryBased.AttributeClusteringBlockingEntropy(RepresentationModel.TOKEN_SHINGLING, profiles, 120, 3, true);
+            //ac = new BlockBuilding.MemoryBased.AttributeClusteringBlocking(RepresentationModel.TOKEN_SHINGLING, profiles, 120, 3, false);
             //ac = new BlockBuilding.MemoryBased.AttributeClusteringBlocking(RepresentationModel.TOKEN_UNIGRAMS, profiles);
         } else {
-            ac = new TokenBlocking(new List[]{profiles[0]});
+            //ac = new TokenBlocking(new List[]{profiles[0]});
             //ac = new BlockBuilding.MemoryBased.AttributeClusteringBlocking(RepresentationModel.TOKEN_UNIGRAMS, new List[]{profiles[0]});
+            //ac = new BlockBuilding.MemoryBased.AttributeClusteringBlocking(RepresentationModel.TOKEN_SHINGLING, profiles, 120, 3, false);
             ac = new BlockBuilding.MemoryBased.AttributeClusteringBlockingEntropy(RepresentationModel.TOKEN_SHINGLING, profiles, 120, 3, false);
         }
 

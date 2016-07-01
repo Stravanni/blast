@@ -35,7 +35,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
 
     protected int minhash_size = 120;
     protected int rows = 1;
-    protected boolean approx = true;
+    protected boolean approx = false;
 
     protected HashMap<String, Integer> all_tokens;
     protected int all_tokens_size;
@@ -227,7 +227,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
             attributeModels[index] = (TokenShingling) RepresentationModel.getModel(model, entry.getKey());
             for (String value : entry.getValue()) {
                 if (approx) {
-                    ((TokenShingling) attributeModels[index]).updateModelApproximation(value, all_tokens);
+                    attributeModels[index].updateModelApproximation(value, all_tokens);
                 } else {
                     attributeModels[index].updateModel(value, all_tokens);
                 }
@@ -364,6 +364,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
     }
 
     protected SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels, int signature_size, int rows_band, boolean approx) {
+        System.out.println("COMPARE ATTRIBUTE lsh");
         int noOfAttributes = attributeModels.length;
         int[] mostSimilarName = new int[noOfAttributes];
         double[] maxSimillarity = new double[noOfAttributes];
@@ -402,7 +403,9 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
                 for (Integer c1 : candidates.get(key)) {
                     for (Integer c2 : candidates.get(key)) {
                         if (c1 < c2) {
-                            double simValue = (approx) ? minhash.similarity(signatures[c1], signatures[c2]) : attributeModels[c1].getSimilarity(attributeModels[c2]);
+                            counter_comparisons++;
+                            //double simValue = (approx) ? minhash.similarity(signatures[c1], signatures[c2]) : attributeModels[c1].getSimilarity(attributeModels[c2]);
+                            double simValue = (approx) ? minhash.similarity(signatures[c1], signatures[c2]) : ((TokenShingling) attributeModels[c1]).getSimilarity_real(attributeModels[c2]);
 
                             if (maxSimillarity[c1] < simValue) {
                                 maxSimillarity[c1] = simValue;
@@ -480,6 +483,8 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
                 for (Integer c1 : candidates.get(key)) {
                     for (Integer c2 : candidates.get(key)) {
                         if (c1 < c2) {
+                            counter_comparisons++;
+                            System.out.println("get similarity attribute " + approx);
                             double simValue = (approx) ? minhash.similarity(signatures[c1], signatures[c2]) : ((TokenShingling) attributeModels1[c1]).getSimilarity_real(attributeModels2[c2 - d1Attributes]);
 
                             if (maxSimillarity[c1] < simValue) {

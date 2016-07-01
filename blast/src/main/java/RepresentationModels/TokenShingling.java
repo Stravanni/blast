@@ -49,6 +49,7 @@ public class TokenShingling extends AbstractModel {
 
     public boolean[] getShingles() {
         boolean[] shingles_list = new boolean[shingles_size];
+        System.out.println("shingle size: " + shingles_size);
         for (int i : shingles_set) {
             shingles_list[i] = true;
         }
@@ -153,6 +154,8 @@ public class TokenShingling extends AbstractModel {
     public double getSimilarity_real(AbstractModel oModel) {
         final TokenShingling otherModel = (TokenShingling) oModel;
         final LinkedHashSet<String> oItemVector = otherModel.getFrequencies();
+
+        //System.out.println("SHINGLES_REAL");
 
         LinkedHashSet<String> intersection = new LinkedHashSet<>(this.tokens);
         intersection.retainAll(oItemVector);
