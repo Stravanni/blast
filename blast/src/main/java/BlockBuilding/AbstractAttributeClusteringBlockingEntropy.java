@@ -109,7 +109,7 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
             // entropyInstance considers each instance of attribute as a value (i.e. bag of tokens)
             if (sourceId == 0) {
                 entropies1[index] = attributeModels[index].getEntropyToken(false);
-                System.out.println(entropies1[index]);
+                //System.out.println(entropies1[index]);
             } else {
                 entropies2[index] = attributeModels[index].getEntropyToken(false);
             }
@@ -117,6 +117,133 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
             index++;
         }
         return attributeModels;
+    }
+
+
+    @Override
+    protected void clusterAttributes(AbstractModel[] attributeModels, SimpleGraph graph) {
+        int noOfAttributes = attributeModels.length;
+
+        double entropy_inside_cluster = 0;
+        double entropy_inside_cluster_singleton = 0;
+        int singletonSize = 0;
+
+        ConnectivityInspector ci = new ConnectivityInspector(graph);
+        List<Set<Integer>> connectedComponents = ci.connectedSets();
+        int singletonId = connectedComponents.size() + 1;
+
+        entropy_clusters = new double[connectedComponents.size() + 2];
+
+        attributeClusters[0] = new HashMap<>(2 * noOfAttributes);
+        int counter = 0;
+        for (Set<Integer> cluster : connectedComponents) {
+            int clusterId = counter;
+            if (cluster.size() == 1) {
+                clusterId = singletonId;
+            } else {
+                counter++;
+            }
+
+            for (int attributeId : cluster) {
+                attributeClusters[0].put(attributeModels[attributeId].getInstanceName(), clusterId);
+                if (clusterId == singletonId) {
+                    entropy_inside_cluster_singleton = entropies1[attributeId];
+                    singletonSize++;
+                } else {
+                    entropy_inside_cluster = entropies1[attributeId];
+                }
+            }
+            entropy_inside_cluster /= cluster.size();
+            entropy_clusters[clusterId] = entropy_inside_cluster;
+        }
+        attributeClusters[1] = null;
+    }
+
+    @Override
+    protected void clusterAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, SimpleGraph graph) {
+        int d1Attributes = attributeModels1.length;
+        int d2Attributes = attributeModels2.length;
+
+        double entropy_inside_cluster = 0;
+        double entropy_inside_cluster_singleton = 0;
+        int singletonSize = 0;
+
+        ConnectivityInspector ci = new ConnectivityInspector(graph);
+        List<Set<Integer>> connectedComponents = ci.connectedSets();
+        int singletonId = connectedComponents.size() + 1;
+
+        entropy_clusters = new double[connectedComponents.size() + 2];
+
+        attributeClusters[0] = new HashMap<>(2 * d1Attributes);
+        attributeClusters[1] = new HashMap<>(2 * d2Attributes);
+        int counter = 0;
+        for (Set<Integer> cluster : connectedComponents) {
+            int clusterId = counter;
+            if (cluster.size() == 1) {
+                clusterId = singletonId;
+            } else {
+                counter++;
+            }
+
+            for (int attributeId : cluster) {
+                if (attributeId < d1Attributes) {
+                    attributeClusters[0].put(attributeModels1[attributeId].getInstanceName(), clusterId);
+                    if (clusterId == singletonId) {
+                        entropy_inside_cluster_singleton = entropies1[attributeId];
+                        singletonSize++;
+                    } else {
+                        entropy_inside_cluster = entropies1[attributeId];
+                    }
+                } else {
+                    attributeClusters[1].put(attributeModels2[attributeId - d1Attributes].getInstanceName(), clusterId);
+                    if (clusterId == singletonId) {
+                        entropy_inside_cluster_singleton = entropies2[attributeId - d1Attributes];
+                        singletonSize++;
+                    } else {
+                        entropy_inside_cluster = entropies2[attributeId - d1Attributes];
+                    }
+                }
+            }
+            entropy_inside_cluster /= cluster.size();
+            entropy_clusters[clusterId] = entropy_inside_cluster;
+        }
+        entropy_inside_cluster_singleton /= singletonSize;
+        entropy_clusters[singletonId] = entropy_inside_cluster_singleton;
+    }
+
+    @Override
+    protected void indexEntities(IndexWriter index, List<EntityProfile> entities) {
+        try {
+            int counter = 0;
+            HashMap<String, Integer> clusters = new HashMap<>();
+            for (EntityProfile profile : entities) {
+                Document doc = new Document();
+                doc.add(new StoredField(DOC_ID, counter++));
+                for (Attribute attribute : profile.getAttributes()) {
+                    Integer clusterId = attributeClusters[sourceId].get(attribute.getName());
+                    //System.out.println(attribute.getName() + ": " + clusterId);
+                    clusters.put(attribute.getName(), clusterId);
+                    if (clusterId == null) {
+                        System.err.println(attribute.getName() + "\t\t" + attribute.getValue());
+                        continue;
+                    }
+                    String clusterSuffix = CLUSTER_PREFIX + clusterId + CLUSTER_SUFFIX + String.valueOf(entropy_clusters[clusterId]);
+                    //System.out.println(clusterSuffix);
+                    for (String token : getTokens(attribute.getValue())) {
+                        if (0 < token.trim().length()) {
+                            doc.add(new StringField(VALUE_LABEL, token.trim() + clusterSuffix, Field.Store.YES));
+                        }
+                    }
+                }
+
+                index.addDocument(doc);
+            }
+            for (String key : clusters.keySet()) {
+                System.out.println(key + ": " + clusters.get(key));
+            }
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

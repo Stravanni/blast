@@ -17,8 +17,8 @@ import java.util.List;
  */
 public class LSH_AttributeMatchInduction {
 
-    private static int DATASET = 1;
-    private static boolean CLEAN = false;
+    private static int DATASET = 2;
+    private static boolean CLEAN = true;
     private static String BASEPATH = "/Users/gio/Desktop/umich/data/data_blockingFramework/";
 
     public static void main(String[] args) {

@@ -33,9 +33,17 @@ public abstract class AbstractBlock implements Serializable {
     protected int blockIndex;
     protected double utilityMeasure;
 
+    protected double entropy;
+
     public AbstractBlock() {
         blockIndex = -1;
         utilityMeasure = -1;
+    }
+
+    public AbstractBlock(double entropy) {
+        blockIndex = -1;
+        utilityMeasure = -1;
+        this.entropy = entropy;
     }
 
     public int getBlockIndex() {
@@ -66,6 +74,10 @@ public abstract class AbstractBlock implements Serializable {
         }
 
         return noOfComparisons;
+    }
+
+    public double getEntropy() {
+        return entropy;
     }
 
     public void setBlockIndex(int blockIndex) {

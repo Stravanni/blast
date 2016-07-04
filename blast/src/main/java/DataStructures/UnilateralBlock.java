@@ -1,25 +1,7 @@
-/*
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    Copyright (C) 2015 George Antony Papadakis (gpapadis@yahoo.gr)
- */
-
 package DataStructures;
 
 import java.io.Serializable;
 import java.util.Arrays;
-
-/**
- * @author G.A.P. II
- */
 
 public class UnilateralBlock extends AbstractBlock implements Serializable {
 
@@ -29,6 +11,12 @@ public class UnilateralBlock extends AbstractBlock implements Serializable {
 
     public UnilateralBlock(int[] entities) {
         super();
+        this.entities = entities;
+        comparisons = ((double) entities.length) * (entities.length - 1) / 2;
+    }
+
+    public UnilateralBlock(int[] entities, double entropy) {
+        super(entropy);
         this.entities = entities;
         comparisons = ((double) entities.length) * (entities.length - 1) / 2;
     }

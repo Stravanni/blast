@@ -364,7 +364,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
     }
 
     protected SimpleGraph compareAttributesLSH(AbstractModel[] attributeModels, int signature_size, int rows_band, boolean approx) {
-        System.out.println("COMPARE ATTRIBUTE lsh");
+        //System.out.println("COMPARE ATTRIBUTE lsh");
         int noOfAttributes = attributeModels.length;
         int[] mostSimilarName = new int[noOfAttributes];
         double[] maxSimillarity = new double[noOfAttributes];
@@ -484,7 +484,7 @@ public abstract class AbstractAttributeClusteringBlocking extends AbstractTokenB
                     for (Integer c2 : candidates.get(key)) {
                         if (c1 < c2) {
                             counter_comparisons++;
-                            System.out.println("get similarity attribute " + approx);
+                            //System.out.println("get similarity attribute " + approx);
                             double simValue = (approx) ? minhash.similarity(signatures[c1], signatures[c2]) : ((TokenShingling) attributeModels1[c1]).getSimilarity_real(attributeModels2[c2 - d1Attributes]);
 
                             if (maxSimillarity[c1] < simValue) {

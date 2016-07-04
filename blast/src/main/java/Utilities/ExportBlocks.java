@@ -1,28 +1,17 @@
-/*
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    Copyright (C) 2015 George Antony Papadakis (gpapadis@yahoo.gr)
- */
 package Utilities;
 
 import BlockBuilding.Utilities;
 import DataStructures.AbstractBlock;
 import DataStructures.BilateralBlock;
 import DataStructures.UnilateralBlock;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.apache.lucene.index.DocsEnum;
 import org.apache.lucene.index.Fields;
 import org.apache.lucene.index.IndexReader;
@@ -35,8 +24,7 @@ import org.apache.lucene.store.FSDirectory;
 import org.apache.lucene.util.BytesRef;
 
 /**
- *
- * @author gap2
+ * @author stravanni
  */
 public class ExportBlocks implements Constants {
 
@@ -150,7 +138,15 @@ public class ExportBlocks implements Constants {
 
                     int[] idsArray = Converter.convertCollectionToArray(entityIds);
                     int[] d1Entities = hashedBlocks.get(text.utf8ToString());
-                    blocks.add(new BilateralBlock(d1Entities, idsArray));
+
+                    double cluster_entorpy = 1.0;
+                    String[] entropy_string = text.utf8ToString().split(CLUSTER_SUFFIX);
+                    if (entropy_string.length == 2) {
+                        cluster_entorpy = Double.parseDouble(entropy_string[1]);
+                        blocks.add(new BilateralBlock(d1Entities, idsArray, cluster_entorpy));
+                    } else {
+                        blocks.add(new BilateralBlock(d1Entities, idsArray));
+                    }
                 }
             }
 
@@ -180,8 +176,17 @@ public class ExportBlocks implements Constants {
                     }
 
                     int[] idsArray = Converter.convertCollectionToArray(entityIds);
-                    UnilateralBlock block = new UnilateralBlock(idsArray);
-                    blocks.add(block);
+
+                    double cluster_entorpy = 1.0;
+                    String[] entropy_string = text.utf8ToString().split(CLUSTER_SUFFIX);
+                    if (entropy_string.length == 2) {
+                        cluster_entorpy = Double.parseDouble(entropy_string[1]);
+                        blocks.add(new UnilateralBlock(idsArray, cluster_entorpy));
+                    } else {
+                        blocks.add(new UnilateralBlock(idsArray));
+                    }
+                    //UnilateralBlock block = new UnilateralBlock(idsArray);
+                    //blocks.add(block);
                 }
             }
         } catch (IOException ex) {

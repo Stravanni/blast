@@ -18,25 +18,24 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 /**
- *
  * @author G.A.P. II
  */
 
-public interface Constants {  
+public interface Constants {
     int SUBJECT = 1;
     int PREDICATE = 2;
     int OBJECT = 3;
-    
+
     int MAX_Q_GRAMS = 15;
-    
+
     double MINIMUM_ATTRIBUTE_SIMILARITY_THRESHOLD = 1E-11;
-    
+
     NumberFormat twoDigitsDouble = new DecimalFormat("#0.00");
     NumberFormat fourDigitsDouble = new DecimalFormat("#0.0000");
-    
+
     String BLANK_NODE_BEGINNING = "_:";
     String CLUSTER_PREFIX = "#$!cl";
-    String CLUSTER_SUFFIX = "!$#";
+    String CLUSTER_SUFFIX = "#@#entropy#@#";
     String DOC_ID = "docid";
     String DEPTH_ONE_INFIX_DELIMITER = "+";
     String INFIX_DELIMITER = "++++";
@@ -46,7 +45,7 @@ public interface Constants {
     String URI_FIELD_TITLE = "URI";
     String URL_LABEL = "entityUrl";
     String VALUE_LABEL = "value";
-    
+
     //for supervised meta-blocking
     double SAMPLE_SIZE = 0.05;
     int DUPLICATE = 1;
