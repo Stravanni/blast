@@ -22,7 +22,7 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
-    <orderEntry type="library" name="Maven: info.debatty:java-lsh:0.9" level="project" />
+    <orderEntry type="library" name="Maven: info.debatty:java-lsh:0.10" level="project" />
     <orderEntry type="library" name="Maven: info.debatty:java-string-similarity:0.12" level="project" />
     <orderEntry type="library" name="Maven: nz.ac.waikato.cms.weka:weka-dev:3.9.0" level="project" />
     <orderEntry type="library" name="Maven: nz.ac.waikato.cms.weka.thirdparty:java-cup-11b:2015.03.26" level="project" />
@@ -47,8 +47,8 @@
     <orderEntry type="library" name="Maven: net.sourceforge.f2j:arpack_combined_all:0.1" level="project" />
     <orderEntry type="library" name="Maven: com.googlecode.netlib-java:netlib-java:1.1" level="project" />
     <orderEntry type="library" name="Maven: com.github.fommil.netlib:core:1.1" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:4.10.4" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:4.10.4" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-core:4.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.lucene:lucene-analyzers-common:4.0.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.10" level="project" />
   </component>
 </module>
