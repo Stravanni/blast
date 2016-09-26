@@ -10,7 +10,7 @@
     </properties>
 
     <groupId>groupId</groupId>
-    <artifactId>ProgressiveBlocking</artifactId>
+    <artifactId>BLAST</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <dependencies>

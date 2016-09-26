@@ -37,7 +37,7 @@ public class Test_metablocking {
         boolean save = false;
         String blocking_type = "M";
         WeightingScheme ws = WeightingScheme.CHI_ENTRO;
-        //WeightingScheme ws = WeightingScheme.FISHER_ENTRO; // For dirty dataset use this test-statistic
+        //WeightingScheme ws = WeightingScheme.FISHER_ENTRO; // For dirty dataset use this test-statistic because of the low number of co-occurrence in the blocks (Fisher exact test vs. Chi-squared ~ approximated)
         ThresholdWeightingScheme th_schme = ThresholdWeightingScheme.AM3;
 
         List<EntityProfile>[] profiles;
