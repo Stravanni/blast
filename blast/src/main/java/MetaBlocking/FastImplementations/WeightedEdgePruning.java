@@ -1,16 +1,3 @@
-/*
- *    This program is free software; you can redistribute it and/or modify
- *    it under the terms of the GNU General Public License as published by
- *    the Free Software Foundation; either version 2 of the License, or
- *    (at your option) any later version.
- *
- *    This program is distributed in the hope that it will be useful,
- *    but WITHOUT ANY WARRANTY; without even the implied warranty of
- *    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *    GNU General Public License for more details.
- *
- *    Copyright (C) 2015 George Antony Papadakis (gpapadis@yahoo.gr)
- */
 package MetaBlocking.FastImplementations;
 
 import DataStructures.AbstractBlock;
@@ -19,14 +6,18 @@ import MetaBlocking.WeightingScheme;
 import java.util.List;
 
 /**
- * @author gap2
+ * @author stravanni
  */
 public class WeightedEdgePruning extends AbstractFastMetablocking {
 
     protected double noOfEdges;
+    double max_min;
+    int ii;
 
     public WeightedEdgePruning(WeightingScheme scheme) {
         this("Fast Weighted Edge Pruning (" + scheme + ")", scheme);
+        max_min = Double.MAX_VALUE;
+        ii = 0;
     }
 
     protected WeightedEdgePruning(String description, WeightingScheme scheme) {
@@ -56,6 +47,56 @@ public class WeightedEdgePruning extends AbstractFastMetablocking {
         }
     }
 
+    protected void processArcs_entro_Entity(int entityId) {
+        validEntities.clear();
+        final int[] associatedBlocks = entityIndex.getEntityBlocks(entityId, 0);
+        if (associatedBlocks.length == 0) {
+            return;
+        }
+
+        for (int blockIndex : associatedBlocks) {
+            double blockComparisons = cleanCleanER ? bBlocks[blockIndex].getNoOfComparisons() : uBlocks[blockIndex].getNoOfComparisons();
+            setNormalizedNeighborEntities(blockIndex, entityId);
+            for (int neighborId : neighbors) {
+                if (flags[neighborId] != entityId) {
+                    counters[neighborId] = 0;
+                    flags[neighborId] = entityId;
+                }
+
+                counters[neighborId] += 1 / blockComparisons;
+                counters_entro[neighborId] += entityIndex.getEntropyBlock(blockIndex);
+
+                validEntities.add(neighborId);
+            }
+        }
+    }
+
+//    protected void processCHI_entro_Entity(int entityId) {
+//        validEntities.clear();
+//        final int[] associatedBlocks = entityIndex.getEntityBlocks(entityId, 0);
+//        if (associatedBlocks.length == 0) {
+//            return;
+//        }
+//
+//        for (int blockIndex : associatedBlocks) {
+//            //double blockComparisons = cleanCleanER ? bBlocks[blockIndex].getNoOfComparisons() : uBlocks[blockIndex].getNoOfComparisons();
+//            setNormalizedNeighborEntities(blockIndex, entityId);
+//            for (int neighborId : neighbors) {
+//                if (flags[neighborId] != entityId) {
+//                    counters[neighborId] = 0;
+//                    counters_entro[neighborId] = 0;
+//                    flags[neighborId] = entityId;
+//                }
+//
+//                //counters[neighborId] += 1 / blockComparisons;
+//                counters[neighborId]++;
+//                counters_entro[neighborId] += entityIndex.getEntropyBlock(blockIndex);
+//
+//                validEntities.add(neighborId);
+//            }
+//        }
+//    }
+
     protected void processEntity(int entityId) {
         validEntities.clear();
         final int[] associatedBlocks = entityIndex.getEntityBlocks(entityId, 0);
@@ -68,10 +109,13 @@ public class WeightedEdgePruning extends AbstractFastMetablocking {
             for (int neighborId : neighbors) {
                 if (flags[neighborId] != entityId) {
                     counters[neighborId] = 0;
+                    counters_entro[neighborId] = 0;
                     flags[neighborId] = entityId;
                 }
 
                 counters[neighborId]++;
+                counters_entro[neighborId] += entityIndex.getEntropyBlock(blockIndex);
+                //System.out.println("counters_entro: " + counters_entro[neighborId]);
                 validEntities.add(neighborId);
             }
         }
@@ -112,9 +156,32 @@ public class WeightedEdgePruning extends AbstractFastMetablocking {
         }
 
         threshold /= noOfEdges;
+        //threshold = threshold/2;
+        //threshold /= (ii*2);
+        //System.out.println("\n\n\nglobal threshold: " + threshold);
+        //threshold = max_min;
+        //System.out.println("\n\n\nglobal max_min  : " + max_min);
     }
 
     protected void updateThreshold(int entityId) {
+//        noOfEdges += validEntities.size();
+//        double max = 0;
+//        for (int neighborId : validEntities) {
+//            //threshold += getWeight(entityId, neighborId);
+//            max = Math.max(getWeight(entityId, neighborId),max);
+//        }
+//        //System.out.println("max local: " + max);
+//        if (max > 0.0) {
+//            //System.out.println("max local: " + max);
+//            //ii ++;
+//            //threshold += max;
+//            max_min = Math.min(max_min, max);
+//        }
+//
+////        if (max > 0.0 && max < 1.0) {
+////            System.out.println("max local: " + max);
+////        }
+//        //max_min += max;
         noOfEdges += validEntities.size();
         for (int neighborId : validEntities) {
             threshold += getWeight(entityId, neighborId);

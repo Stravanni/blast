@@ -17,11 +17,11 @@ import Comparators.ComparisonWeightComparator;
 import DataStructures.AbstractBlock;
 import DataStructures.Comparison;
 import MetaBlocking.WeightingScheme;
+
 import java.util.List;
 import java.util.PriorityQueue;
 
 /**
- *
  * @author gap2
  */
 public class CardinalityNodePruning extends CardinalityEdgePruning {
@@ -30,7 +30,7 @@ public class CardinalityNodePruning extends CardinalityEdgePruning {
     protected int lastId;
 
     public CardinalityNodePruning(WeightingScheme scheme) {
-        this("Fast Cardinality Node Pruning ("+scheme+")", scheme);
+        this("Fast Cardinality Node Pruning (" + scheme + ")", scheme);
     }
 
     protected CardinalityNodePruning(String description, WeightingScheme scheme) {
@@ -69,5 +69,8 @@ public class CardinalityNodePruning extends CardinalityEdgePruning {
     @Override
     protected void setThreshold() {
         threshold = Math.max(1, blockAssingments / noOfEntities);
+        //threshold = Math.max(1, (blockAssingments * 5) / (noOfEntities));
+        //threshold = 25;
+        System.out.println("\n\nThresold K: " + threshold + "\n");
     }
 }

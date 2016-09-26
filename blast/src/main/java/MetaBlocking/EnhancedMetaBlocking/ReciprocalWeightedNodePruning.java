@@ -22,10 +22,10 @@ import MetaBlocking.WeightingScheme;
  * @author gap2
  */
 
-public class ReciprocalWeightedNodePruning extends RedundancyWeightedNodePruning {
+public class ReciprocalWeightedNodePruning extends RedefinedWeightedNodePruning {
     
     public ReciprocalWeightedNodePruning(WeightingScheme scheme) {
-        super("Reciprocal Weighted Node Pruning", scheme);
+        super("Reciprocal Weighted Node Pruning ("+scheme+")", scheme);
     }
     
     @Override

@@ -17,7 +17,6 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author gap2
  */
 public class FastEntityIndex implements Serializable {
@@ -28,10 +27,13 @@ public class FastEntityIndex implements Serializable {
     private int datasetLimit;
     private int noOfBlocks;
     private int noOfEntities;
-    
+
+    private double[] entropies;
+    private double maxEntropy;
+
     private double[] entityComparisons;
     private int[][] entityBlocks;
-    
+
     private BilateralBlock[] bBlocks;
     private UnilateralBlock[] uBlocks;
 
@@ -46,6 +48,8 @@ public class FastEntityIndex implements Serializable {
             System.err.println("Its functionalities can be carried out with same efficiency through a linear search of all comparisons!");
             return;
         }
+
+        entropies = new double[blocks.size()];
 
         firstPass(blocks);
         if (cleanCleanER) {
@@ -97,7 +101,7 @@ public class FastEntityIndex implements Serializable {
             }
         }
     }
-    
+
     public BilateralBlock[] getBilateralBlocks() {
         return bBlocks;
     }
@@ -113,7 +117,7 @@ public class FastEntityIndex implements Serializable {
         }
         return entityBlocks[entityId];
     }
-    
+
     public double[] getEntityComparisons() {
         return entityComparisons;
     }
@@ -131,34 +135,74 @@ public class FastEntityIndex implements Serializable {
         return entityBlocks[entityId].length;
     }
 
+    public double getNoOfEntityBlocks_entopy(int entityId, int useDLimit) {
+        entityId += useDLimit * datasetLimit;
+        if (entityBlocks[entityId] == null) {
+            return -1;
+        }
+        double sum_entrop = 0;
+        for (int b : entityBlocks[entityId]) {
+//            if (entropies[b] < 13) {
+//                System.out.println(entropies[b]);
+//            }
+            sum_entrop += entropies[b];
+        }
+        //return entityBlocks[entityId].length;
+        return sum_entrop;
+    }
+
+    public double getTotalNoOfCommonBlocks_with_entopies(int neighbor) {
+        return entropies[neighbor];
+    }
+
+    public double getEntropyBlock(int block_id) {
+        return entropies[block_id];
+    }
+
+    public double get_maxEntropy() {
+        return maxEntropy;
+    }
+
     public UnilateralBlock[] getUnilateralBlocks() {
         return uBlocks;
     }
-    
+
     public int[][] getWholeIndex() {
         return entityBlocks;
     }
-    
+
     private void indexBilateralEntities() {
+        // quante volte un profilo appare nei blocchi
         int[] counters = new int[noOfEntities];
+        //double[] counters_entro = new double[noOfEntities];
+        // quanti confronti sono associati a un profilo
         entityComparisons = new double[noOfEntities];
+
+        //int blockIndex = 0;
         for (BilateralBlock block : bBlocks) {
+
+            //entropies[blockIndex] = block.getEntropy();
+            //block.setBlockIndex(blockIndex++);
+
             int innerSize1 = block.getIndex1Entities().length;
             int innerSize2 = block.getIndex2Entities().length;
             for (int id1 : block.getIndex1Entities()) {
                 counters[id1]++;
+                //counters_entro[id1] += block.getEntropy();
                 entityComparisons[id1] += innerSize2;
             }
 
             for (int id2 : block.getIndex2Entities()) {
                 int entityId = datasetLimit + id2;
                 counters[entityId]++;
+                //counters_entro[entityId]+=block.getEntropy();
                 entityComparisons[entityId] += innerSize1;
             }
         }
 
         //initialize inverted index
         entityBlocks = new int[noOfEntities][];
+        //entityBlocks_entro = new int[noOfEntities][];
         for (int i = 0; i < noOfEntities; i++) {
             entityBlocks[i] = new int[counters[i]];
             counters[i] = 0;
@@ -177,19 +221,30 @@ public class FastEntityIndex implements Serializable {
                 entityBlocks[entityId][counters[entityId]] = counter;
                 counters[entityId]++;
             }
+            entropies[counter] = block.getEntropy();
+//            if (entropies[counter]<13){
+//                System.out.println("wntropy < 13");
+//            }
+            //System.out.println("entropy: " + entropies[counter]);
             counter++;
+        }
+        maxEntropy = 0;
+        for (double e : entropies) {
+            maxEntropy = Math.max(maxEntropy, e);
         }
     }
 
     private void indexUnilateralEntities() {
         //count valid entities & blocks per entity
         int[] counters = new int[noOfEntities];
+        double[] counters_entro = new double[noOfEntities];
+
         entityComparisons = new double[noOfEntities];
         for (UnilateralBlock block : uBlocks) {
             int blockSize = block.getEntities().length;
             for (int id : block.getEntities()) {
                 counters[id]++;
-                entityComparisons[id] += blockSize-1;
+                entityComparisons[id] += blockSize - 1;
             }
         }
 
@@ -207,10 +262,15 @@ public class FastEntityIndex implements Serializable {
                 entityBlocks[id][counters[id]] = counter;
                 counters[id]++;
             }
+            entropies[counter] = block.getEntropy();
             counter++;
         }
+        maxEntropy = 0;
+        for (double e : entropies) {
+            maxEntropy = Math.max(maxEntropy, e);
+        }
     }
-    
+
     public boolean isCleanCleanER() {
         return cleanCleanER;
     }

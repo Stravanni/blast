@@ -34,7 +34,7 @@ public class ReciprocalCardinalityNodePruning extends CardinalityNodePruning {
     protected PriorityQueue[] nearestEntities;
 
     public ReciprocalCardinalityNodePruning(WeightingScheme scheme) {
-        super("Reciprocal Cardinality Node Pruning", scheme);
+        super("Reciprocal Cardinality Node Pruning ("+scheme+")", scheme);
     }
 
     @Override

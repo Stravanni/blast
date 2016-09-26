@@ -14,12 +14,13 @@
 
 package OnTheFlyMethods;
 
+import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
 import DataStructures.AbstractBlock;
 import DataStructures.BilateralBlock;
 import DataStructures.Comparison;
-import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
 import MetaBlocking.AbstractNodePruning;
 import MetaBlocking.WeightingScheme;
+
 import java.util.List;
 
 /**
@@ -33,7 +34,7 @@ public class WeightedNodePruning extends AbstractNodePruning {
     protected final AbstractDuplicatePropagation duplicatePropagation;
     
     public WeightedNodePruning(AbstractDuplicatePropagation adp, WeightingScheme scheme) {
-        this(adp, "Weighted Node Pruning", scheme);
+        this(adp, "Weighted Node Pruning ("+scheme+")", scheme);
     }
     
     public WeightedNodePruning(AbstractDuplicatePropagation adp, String description, WeightingScheme scheme) {

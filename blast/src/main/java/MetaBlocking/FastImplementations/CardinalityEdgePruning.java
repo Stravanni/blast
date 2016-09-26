@@ -86,7 +86,6 @@ public class CardinalityEdgePruning extends WeightedEdgePruning {
     @Override
     protected void setThreshold() {
         threshold = blockAssingments / 2;
-        System.out.println("set threshold to: " + threshold);
     }
 
     protected void verifyValidEntities(int entityId) {

@@ -14,8 +14,8 @@
 
 package OnTheFlyMethods;
 
-import DataStructures.Comparison;
 import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
+import DataStructures.Comparison;
 import MetaBlocking.WeightingScheme;
 
 /**
@@ -23,10 +23,10 @@ import MetaBlocking.WeightingScheme;
  * @author gap2
  */
 
-public class ReciprocalWeightedNodePruning extends RedundancyWeightedNodePruning {
+public class ReciprocalWeightedNodePruning extends RedefinedWeightedNodePruning {
     
     public ReciprocalWeightedNodePruning(AbstractDuplicatePropagation adp, WeightingScheme scheme) {
-        super(adp, "Reciprocal Weighted Node Pruning", scheme);
+        super(adp, "Reciprocal Weighted Node Pruning ("+scheme+")", scheme);
     }
     
     @Override

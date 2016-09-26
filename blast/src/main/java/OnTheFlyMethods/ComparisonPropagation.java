@@ -18,6 +18,7 @@ import DataStructures.AbstractBlock;
 import DataStructures.Comparison;
 import DataStructures.EntityIndex;
 import Utilities.ComparisonIterator;
+
 import java.util.List;
 
 /**

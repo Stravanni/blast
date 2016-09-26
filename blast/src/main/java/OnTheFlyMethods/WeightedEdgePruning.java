@@ -14,11 +14,12 @@
 
 package OnTheFlyMethods;
 
+import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
 import DataStructures.AbstractBlock;
 import DataStructures.Comparison;
-import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
-import Utilities.ComparisonIterator;
 import MetaBlocking.WeightingScheme;
+import Utilities.ComparisonIterator;
+
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class WeightedEdgePruning extends MetaBlocking.WeightedEdgePruning {
     private final AbstractDuplicatePropagation duplicatePropagation;
 
     public WeightedEdgePruning(AbstractDuplicatePropagation adp, WeightingScheme scheme) {
-        super("On-the-fly Edge Pruning", scheme);
+        super("On-the-fly Edge Pruning ("+scheme+")", scheme);
         duplicatePropagation = adp;
     }
 

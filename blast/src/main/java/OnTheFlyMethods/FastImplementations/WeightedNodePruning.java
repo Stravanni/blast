@@ -16,24 +16,35 @@ package OnTheFlyMethods.FastImplementations;
 import BlockProcessing.ComparisonRefinement.AbstractDuplicatePropagation;
 import DataStructures.AbstractBlock;
 import MetaBlocking.WeightingScheme;
+
 import java.util.List;
 
 /**
- *
  * @author gap2
  */
 public class WeightedNodePruning extends WeightedEdgePruning {
 
     protected int firstId;
     protected int lastId;
+    protected boolean threshold_new;
 
     public WeightedNodePruning(AbstractDuplicatePropagation adp, WeightingScheme scheme) {
-        this(adp, "Fast Weighted Node Pruning", scheme);
+        this(adp, "Fast Weighted Node Pruning (" + scheme + ")", scheme);
+    }
+
+    public WeightedNodePruning(AbstractDuplicatePropagation adp, WeightingScheme scheme, boolean threshold) {
+        this(adp, "Fast Weighted Node Pruning (" + scheme + ")", scheme, threshold);
     }
 
     protected WeightedNodePruning(AbstractDuplicatePropagation adp, String description, WeightingScheme scheme) {
         super(adp, description, scheme);
         nodeCentric = true;
+    }
+
+    protected WeightedNodePruning(AbstractDuplicatePropagation adp, String description, WeightingScheme scheme, boolean threshold) {
+        super(adp, description, scheme);
+        nodeCentric = true;
+        threshold_new = threshold;
     }
 
     @Override
@@ -45,7 +56,16 @@ public class WeightedNodePruning extends WeightedEdgePruning {
                 setThreshold(i);
                 verifyValidEntities(i, newBlocks);
             }
-        } else {
+        }
+//        else if (weightingScheme.equals(WeightingScheme.CHI_ENTRO)) {
+//            System.out.println("\n\n\n\nchi entro in weighted node pruning\n\n\n\n\n");
+//            for (int i = firstId; i < lastId; i++) {
+//                processCHI_entro_Entity(i);
+//                setThreshold(i);
+//                verifyValidEntities(i, newBlocks);
+//            }
+//        }
+        else {
             for (int i = firstId; i < lastId; i++) {
                 processEntity(i);
                 setThreshold(i);
@@ -65,9 +85,17 @@ public class WeightedNodePruning extends WeightedEdgePruning {
 
     protected void setThreshold(int entityId) {
         threshold = 0;
-        for (int neighborId : validEntities) {
-            threshold += getWeight(entityId, neighborId);
+        if (threshold_new) {
+            for (int neighborId : validEntities) {
+                threshold = Math.max(threshold, getWeight(entityId, neighborId));
+            }
+            threshold /= 2;
+        } else {
+            for (int neighborId : validEntities) {
+                threshold += getWeight(entityId, neighborId);
+            }
+            threshold /= validEntities.size();
+            //System.out.println("on the fly valid entity: " + validEntities.size());
         }
-        threshold /= validEntities.size();
     }
 }

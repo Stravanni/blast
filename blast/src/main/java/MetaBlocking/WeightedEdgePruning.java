@@ -81,9 +81,11 @@ public class WeightedEdgePruning extends AbstractMetablocking {
                 }
 
                 averageWeight += weight;
+                //averageWeight = Math.max(averageWeight, weight);
                 totalComparisons++;
             }
         }
         averageWeight /= totalComparisons;
+        //averageWeight /= 20;
     }
 }

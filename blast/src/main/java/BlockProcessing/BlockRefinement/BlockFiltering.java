@@ -20,13 +20,13 @@ import DataStructures.BilateralBlock;
 import DataStructures.UnilateralBlock;
 import BlockProcessing.AbstractEfficiencyMethod;
 import Utilities.Converter;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 /**
- *
- * @author gap2
+ * @author giovanni
  */
 public class BlockFiltering extends AbstractEfficiencyMethod {
 
@@ -42,7 +42,7 @@ public class BlockFiltering extends AbstractEfficiencyMethod {
     public BlockFiltering(double r) {
         this(r, "Block Filtering");
     }
-    
+
     public BlockFiltering(double r, String description) {
         super(description);
         ratio = r;
@@ -51,7 +51,9 @@ public class BlockFiltering extends AbstractEfficiencyMethod {
     @Override
     public void applyProcessing(List<AbstractBlock> blocks) {
         countEntities(blocks);
+        //sortBlocksEntro(blocks);
         sortBlocks(blocks);
+        //sortBlocksEntro(blocks);
         getLimits(blocks);
         initializeCounters();
         restructureBlocks(blocks);
@@ -165,7 +167,10 @@ public class BlockFiltering extends AbstractEfficiencyMethod {
                 for (int entityId : blockEntitiesD2) {
                     counterD2[entityId]++;
                 }
-                newBlocks.add(new BilateralBlock(blockEntitiesD1, blockEntitiesD2));
+                //if (oldBlock.getNoOfComparisons() < 1000) {
+                newBlocks.add(new BilateralBlock(blockEntitiesD1, blockEntitiesD2, oldBlock.getEntropy()));
+                //}
+                //newBlocks.add(new BilateralBlock(blockEntitiesD1, blockEntitiesD2));
             }
         }
         blocks.clear();
@@ -196,7 +201,7 @@ public class BlockFiltering extends AbstractEfficiencyMethod {
                 for (int entityId : blockEntities) {
                     counterD1[entityId]++;
                 }
-                newBlocks.add(new UnilateralBlock(blockEntities));
+                newBlocks.add(new UnilateralBlock(blockEntities, oldBlock.getEntropy()));
             }
         }
         blocks.clear();

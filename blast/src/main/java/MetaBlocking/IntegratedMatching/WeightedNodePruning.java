@@ -31,7 +31,7 @@ public class WeightedNodePruning extends MetaBlocking.WeightedNodePruning {
     private final EntityProfile[] profiles2;
 
     public WeightedNodePruning(List<EntityProfile> pr1, List<EntityProfile> pr2, WeightingScheme scheme) {
-        super("Node Pruning with integrated matching", scheme);
+        super("Node Pruning with integrated matching ("+scheme+")", scheme);
         profiles1 = pr1.toArray(new EntityProfile[pr1.size()]);
         if (pr2 == null) {
             profiles2 = null;
