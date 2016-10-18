@@ -64,7 +64,6 @@ public class BlastWeightedNodePruning extends RedefinedWeightedNodePruning {
 //                }
 //                break;
                 double th12 = Math.sqrt(Math.pow(averageWeight[entityId], 2) + Math.pow(averageWeight[neighborId], 2)) / 4;
-
                 if (th12 <= weight) {
                     //if (Math.max(averageWeight[entityId],averageWeight[neighborId]) <= weight) {
                     return entityId < neighborId;
