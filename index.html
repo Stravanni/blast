@@ -30,17 +30,36 @@
       <section>
         <p><img src="https://photos-2.dropbox.com/t/2/AADuC-bicWowMCvs1JzwYsmqg_2EqyPjLTCfgLgTH3OAPw/12/58906809/png/32x32/1/_/1/2/blast_logo.png/EJOfxC0Y2YghIAcoBw/Cm4pd260YU4h1jT5w4hVIyMDv09ZVL3J3Z9IxQTdvjc?size=1280x960&amp;size_mode=3" alt=""></p>
 
+<ul>
+<li><p>Doing entity resolution on <em>entity resolution</em> you can find: <em>record linkage, duplicates detection, entity matching, deduplication, fuzzy matching</em>.</p></li>
+<li><p>Doing entity resolution on <em>records</em> you can find: <em>tuples, entity profiles, semi-structured documents</em>.</p></li>
+</ul>
+
+<h2>
+<a id="what-does-blast-do" class="anchor" href="#what-does-blast-do" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>What does Blast do?</h2>
+
+<p>It helps to scale Entity Resolution: it efficiently extracts <em>loose</em> schema information, and uses this information to group together records that most likely will match.</p>
+
+<p>Basically, instead of comparing all possible paris of records, you only compare subsets of them.</p>
+
+<p>P.S.: Blast employs only <strong>unsupervised</strong> techniques.</p>
+
+<h2>
+<a id="when-to-use-blast" class="anchor" href="#when-to-use-blast" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>When to use Blast?</h2>
+
+<p>When you have semi-structured data to clean, but you cannot do schema-matching to apply traditional blocking techniques.</p>
+
 <h2>
 <a id="current-project-version" class="anchor" href="#current-project-version" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Current Project Version</h2>
 
 <p>Here the code of "BLAST: a loosely schema-aware meta-blocking approach for entity resolution", please cite: <a href="#simonini2016">[1]</a>.</p>
 
-<p>The method is implemented on top of the <em>Blocking Framework</em>, A framework for blocking-based Entity Resolution <a href="#papadakis2013">[2]</a>.</p>
+<p>The approach is implemented on top of the <em>Blocking Framework</em>, A framework for blocking-based Entity Resolution <a href="#papadakis2013">[2]</a>.</p>
 
 <h2>
 <a id="where-to-start" class="anchor" href="#where-to-start" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Where to start</h2>
 
-<p>Take a look to Test_metablocking.java</p>
+<p>Take a look to Experiments -&gt; Test_metablocking.java</p>
 
 <h2>
 <a id="references" class="anchor" href="#references" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>References</h2>
