@@ -1,4 +1,4 @@
-![](https://photos-2.dropbox.com/t/2/AADuC-bicWowMCvs1JzwYsmqg_2EqyPjLTCfgLgTH3OAPw/12/58906809/png/32x32/1/_/1/2/blast_logo.png/EJOfxC0Y2YghIAcoBw/Cm4pd260YU4h1jT5w4hVIyMDv09ZVL3J3Z9IxQTdvjc?size=1280x960&size_mode=3)
+#Blast
 
 - Doing entity resolution on *entity resolution* you can find: *record linkage, duplicates detection, entity matching, deduplication, fuzzy matching*.
 
