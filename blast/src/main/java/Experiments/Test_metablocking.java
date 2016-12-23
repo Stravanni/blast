@@ -16,6 +16,8 @@ import MetaBlocking.ThresholdWeightingScheme;
 import MetaBlocking.WeightingScheme;
 import OnTheFlyMethods.FastImplementations.BlastWeightedNodePruning;
 
+import Utilities.BlockStatistics;
+
 import java.io.IOException;
 import java.time.Duration;
 import java.time.Instant;
@@ -109,18 +111,24 @@ public class Test_metablocking {
         System.out.println("block purging_filtering time: " + Duration.between(start_purging, start_blast));
 
         System.out.println("\nmain: " + blocks.get(0).getEntropy() + "\n\n");
-        BlastWeightedNodePruning b_wnp = new BlastWeightedNodePruning(adp, ws, th_schme, blocks.size());
+
+        //BlastWeightedNodePruning b_wnp = new BlastWeightedNodePruning(adp, ws, th_schme, blocks.size());
 
         //OnTheFlyMethods.FastImplementations.RedefinedWeightedNodePruning b_wnp = new OnTheFlyMethods.FastImplementations.RedefinedWeightedNodePruning(adp, ws, th_schme, blocks.size());
         //OnTheFlyMethods.FastImplementations.ReciprocalWeightedNodePruning b_wnp = new OnTheFlyMethods.FastImplementations.ReciprocalWeightedNodePruning(adp, ws, th_schme, blocks.size());
         //BlastWeightedNodePruning bwnp = new BlastWeightedNodePruning(adp, ws, th_schemes[0], blocks.size());
+        MetaBlocking.EnhancedMetaBlocking.FastImplementations.RedefinedCardinalityNodePruning b_wnp= new MetaBlocking.EnhancedMetaBlocking.FastImplementations.RedefinedCardinalityNodePruning(WeightingScheme.);
         b_wnp.applyProcessing(blocks);
 
-        double[] values = b_wnp.getPerformance();
+        /*double[] values = b_wnp.getPerformance();
 
         System.out.println("pc: " + values[0]);
         System.out.println("pq: " + values[1]);
-        System.out.println("f1: " + (2 * values[0] * values[1]) / (values[0] + values[1]));
+        System.out.println("f1: " + (2 * values[0] * values[1]) / (values[0] + values[1]));*/
+
+        BlockStatistics bStats1 = new BlockStatistics(blocks, adp);
+        double[] values = bStats1.applyProcessing();
+        System.out.println("final  1 " + values[0] +" values 2 " + values[1] +" values 3" + values[2]);
 
         Instant end_blast = Instant.now();
 
