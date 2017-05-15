@@ -109,13 +109,15 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
             // entropyInstance considers each instance of attribute as a value (i.e. bag of tokens)
             if (sourceId == 0) {
                 entropies1[index] = attributeModels[index].getEntropyToken(false);
-                //System.out.println(entropies1[index]);
+                System.out.println("i: " + index + " " + entry.getKey() + " h: " + entropies1[index]);
             } else {
                 entropies2[index] = attributeModels[index].getEntropyToken(false);
+                System.out.println("i: " + index + " " + entry.getKey() + " h: " + entropies2[index]);
             }
 
             index++;
         }
+        System.out.println("\n");
         return attributeModels;
     }
 
@@ -161,6 +163,9 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
 
     @Override
     protected void clusterAttributes(AbstractModel[] attributeModels1, AbstractModel[] attributeModels2, SimpleGraph graph) {
+
+        System.out.println("cluster attribtutes with entropies");
+
         int d1Attributes = attributeModels1.length;
         int d2Attributes = attributeModels2.length;
 
@@ -178,6 +183,8 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
         attributeClusters[1] = new HashMap<>(2 * d2Attributes);
         int counter = 0;
         for (Set<Integer> cluster : connectedComponents) {
+            entropy_inside_cluster = 0;
+            System.out.println("cluster: " + cluster.toString());
             int clusterId = counter;
             if (cluster.size() == 1) {
                 clusterId = singletonId;
@@ -185,22 +192,25 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
                 counter++;
             }
 
+            /**
+             * todo in the paper it was not "+=", but only "="
+             */
             for (int attributeId : cluster) {
                 if (attributeId < d1Attributes) {
                     attributeClusters[0].put(attributeModels1[attributeId].getInstanceName(), clusterId);
                     if (clusterId == singletonId) {
-                        entropy_inside_cluster_singleton = entropies1[attributeId];
+                        entropy_inside_cluster_singleton += entropies1[attributeId];
                         singletonSize++;
                     } else {
-                        entropy_inside_cluster = entropies1[attributeId];
+                        entropy_inside_cluster += entropies1[attributeId];
                     }
                 } else {
                     attributeClusters[1].put(attributeModels2[attributeId - d1Attributes].getInstanceName(), clusterId);
                     if (clusterId == singletonId) {
-                        entropy_inside_cluster_singleton = entropies2[attributeId - d1Attributes];
+                        entropy_inside_cluster_singleton += entropies2[attributeId - d1Attributes];
                         singletonSize++;
                     } else {
-                        entropy_inside_cluster = entropies2[attributeId - d1Attributes];
+                        entropy_inside_cluster += entropies2[attributeId - d1Attributes];
                     }
                 }
             }
@@ -239,7 +249,7 @@ public abstract class AbstractAttributeClusteringBlockingEntropy extends Abstrac
                 index.addDocument(doc);
             }
             for (String key : clusters.keySet()) {
-                System.out.println(key + ": " + clusters.get(key));
+                System.out.println(key + ":\t" + clusters.get(key) + "\th: " + entropy_clusters[clusters.get(key)]);
             }
         } catch (IOException ex) {
             ex.printStackTrace();

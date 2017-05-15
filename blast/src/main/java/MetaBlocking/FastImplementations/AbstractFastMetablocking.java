@@ -214,16 +214,16 @@ public abstract class AbstractFastMetablocking extends AbstractFastEfficiencyMet
                 v_[1] = (int) (totalBlocks - (v[0] + v[1] + v_[0]));
 
                 if (v[0] < 1) {
-                    v[0] = 0;
+                    v[0] = 1;
                 }
                 if (v_[0] < 1) {
-                    v_[0] = 0;
+                    v_[0] = 1;
                 }
                 if (v[1] < 1) {
-                    v[1] = 0;
+                    v[1] = 1;
                 }
                 if (v_[1] < 1) {
-                    v_[1] = 0;
+                    v_[1] = 1;
                 }
                 long[][] cM = {v, v_};
                 //ChisqTest inferenceChiE = new ChisqTest(cME);
@@ -292,6 +292,7 @@ public abstract class AbstractFastMetablocking extends AbstractFastEfficiencyMet
                     double a2 = vE[0] + 2 * v_E[0] + v_E[1];
                     double a3 = vE[0] + vE[1] + v_E[0];
                     double a4 = vE[1] + v_E[0] + 2 * v_E[1];
+                    /*System.out.println(counters_entro[neighborId]);*/
                     return chi_squared_test_E.chiSquare(cME) * counters_entro[neighborId];
                     //return chi_squared_test_E.chiSquare(cME) * counters_entro[neighborId] * (a1 + a2 + a3 + a4);
 

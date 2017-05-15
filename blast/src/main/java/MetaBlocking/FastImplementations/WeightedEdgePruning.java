@@ -115,7 +115,8 @@ public class WeightedEdgePruning extends AbstractFastMetablocking {
 
                 counters[neighborId]++;
                 counters_entro[neighborId] += entityIndex.getEntropyBlock(blockIndex);
-                //System.out.println("counters_entro: " + counters_entro[neighborId]);
+                /*System.out.println("counters_entro: " + counters_entro[neighborId]);
+                System.out.println("wep#entro: " + entityIndex.getEntropyBlock(blockIndex));*/
                 validEntities.add(neighborId);
             }
         }
